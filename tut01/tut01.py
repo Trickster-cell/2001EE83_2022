@@ -6,7 +6,8 @@ os.system("cls")
 # Opening output file and writing header
 with open('octant_output.csv', "w", newline='') as file:
     writer = csv.writer(file)
-    writer.writerow(['Time', 'U', 'V', 'W', 'U Avg', 'V Avg', 'W Avg', "U'=U - U avg", "V'=V - V avg", "W'=W - W avg",'Octant', "   ", 'Octant ID', '1', '-1', '2', '-2', '3', '-3', '4', '-4'])
+    writer.writerow(['Time', 'U', 'V', 'W', 'U Avg', 'V Avg', 'W Avg', "U'=U - U avg", "V'=V - V avg",
+                    "W'=W - W avg", 'Octant', "   ", 'Octant ID', '1', '-1', '2', '-2', '3', '-3', '4', '-4'])
 
 file.close()
 # initializing variables
@@ -68,9 +69,7 @@ with open("octant_input.csv", "r", newline="") as file:
         x = (float)(row['U'])
         y = (float)(row['V'])
         z = (float)(row['W'])
-        
-        
-        
+
         x -= Uavg
         y -= Vavg
         z -= Wavg
@@ -85,11 +84,11 @@ with open("octant_input.csv", "r", newline="") as file:
         elif x < 0 and y < 0 and z >= 0:
             temp[4] = temp[4] + 1
             octant3 = octant3+1
-            oct =3
+            oct = 3
         elif x > 0 and y < 0 and z >= 0:
             temp[6] = temp[6] + 1
             octant4 = octant4+1
-            oct =4
+            oct = 4
         elif x > 0 and y > 0 and z < 0:
             temp[1] = temp[1] + 1
             octantM1 = octantM1+1
@@ -101,11 +100,11 @@ with open("octant_input.csv", "r", newline="") as file:
         elif x < 0 and y < 0 and z < 0:
             temp[5] = temp[5] + 1
             octantM3 = octantM3+1
-            oct =-3
+            oct = -3
         elif x > 0 and y < 0 and z < 0:
             temp[7] = temp[7] + 1
             octantM4 = octantM4+1
-            oct =-4
+            oct = -4
         # print(cnt)
         # fieldnames = ['Time', 'U', 'V', 'W', 'U Avg', 'V Avg', 'W Avg', "U'=U - U avg", "V'=V - V avg", "W'=W - W avg",'Octant', "   ", 'Octant ID', '1', '-1', '2', '-2', '3', '-3', '4', '-4']
         # writer = csv.DictWriter(f, fieldnames=fieldnames)
@@ -114,11 +113,11 @@ with open("octant_input.csv", "r", newline="") as file:
         # Vavg1 = ""
         # Wavg1 = ""
         octantk.append(oct)
-        
-        
+
+
 file.close()
 
-
+cnttemp = 0
 with open("octant_input.csv", "r", newline="") as file:
     reader = csv.DictReader(file)
     # print(reader)
@@ -126,9 +125,7 @@ with open("octant_input.csv", "r", newline="") as file:
         x = (float)(row['U'])
         y = (float)(row['V'])
         z = (float)(row['W'])
-        
-        
-        
+
         x -= Uavg
         y -= Vavg
         z -= Wavg
@@ -143,11 +140,11 @@ with open("octant_input.csv", "r", newline="") as file:
         elif x < 0 and y < 0 and z >= 0:
             temp[4] = temp[4] + 1
             octant3 = octant3+1
-            oct =3
+            oct = 3
         elif x > 0 and y < 0 and z >= 0:
             temp[6] = temp[6] + 1
             octant4 = octant4+1
-            oct =4
+            oct = 4
         elif x > 0 and y > 0 and z < 0:
             temp[1] = temp[1] + 1
             octantM1 = octantM1+1
@@ -159,15 +156,37 @@ with open("octant_input.csv", "r", newline="") as file:
         elif x < 0 and y < 0 and z < 0:
             temp[5] = temp[5] + 1
             octantM3 = octantM3+1
-            oct =-3
+            oct = -3
         elif x > 0 and y < 0 and z < 0:
             temp[7] = temp[7] + 1
             octantM4 = octantM4+1
-            oct =-4
+            oct = -4
         # print(cnt)
-        fieldnames = ['Time', 'U', 'V', 'W', 'U Avg', 'V Avg', 'W Avg', "U'=U - U avg", "V'=V - V avg", "W'=W - W avg",'Octant', "   ", 'Octant ID', '1', '-1', '2', '-2', '3', '-3', '4', '-4']
+        tempstr = f"{cnttemp*mod}-{(cnttemp+1)*mod}"
+        cnttemp += 1
+        one = (str)(temp[1])
+        two = (str)(temp[2])
+        three = (str)(temp[3])
+        four = (str)(temp[4])
+        five = (str)(temp[5])
+        six = (str)(temp[6])
+        seven = (str)(temp[7])
+        zero = (str)(temp[0])
+        if(cnttemp*mod > 30000):
+            tempstr = ""
+            one = ""
+            two = ""
+            three = ""
+            four = ""
+            five = ""
+            six = ""
+            seven = ""
+            zero = ""
+        fieldnames = ['Time', 'U', 'V', 'W', 'U Avg', 'V Avg', 'W Avg', "U'=U - U avg", "V'=V - V avg",
+                      "W'=W - W avg", 'Octant', "   ", 'Octant ID', '1', '-1', '2', '-2', '3', '-3', '4', '-4']
         writer = csv.DictWriter(f, fieldnames=fieldnames)
-        writer.writerow({'Time': row['Time'], 'U': x, 'V': y, 'W': z,  "U Avg": Uavg1, "V Avg": Vavg1,"W Avg": Wavg1, "U'=U - U avg": x-Uavg, "V'=V - V avg": y-Vavg, "W'=W - W avg": z-Wavg, "Octant": oct})
+        writer.writerow({'Time': row['Time'], 'U': x, 'V': y, 'W': z,  "U Avg": Uavg1, "V Avg": Vavg1, "W Avg": Wavg1, "U'=U - U avg": x-Uavg, "V'=V - V avg": y-Vavg,
+                        "W'=W - W avg": z-Wavg, "Octant": oct, "   ": " ", "Octant ID": tempstr, "1": zero, "-1": one, "2": two, "-2": three, "3": four, "-3": five, "4": six, "-4": seven})
         Uavg1 = ""
         Vavg1 = ""
         Wavg1 = ""
@@ -175,7 +194,7 @@ with open("octant_input.csv", "r", newline="") as file:
         cnt2 = cnt2+1
         if (cnt2 == mod):
             # print(1)
-            cnt2=0
+            cnt2 = 0
             # print(temp)
             list.append(temp)
             temp = [0, 0, 0, 0, 0, 0, 0, 0]
@@ -203,7 +222,7 @@ with open("octant_input.csv", "r", newline="") as file:
             elif x > 0 and y < 0 and z < 0:
                 temp[7] = temp[7] + 1
             # octantM4 = octantM4+1
-if(temp!=[0, 0, 0, 0, 0, 0, 0, 0]):
+if(temp != [0, 0, 0, 0, 0, 0, 0, 0]):
     list.append(temp)
 print(list)
 
