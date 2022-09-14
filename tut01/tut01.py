@@ -1,5 +1,7 @@
+from itertools import count
 import os
 import csv
+# import pandas as pd
 os.system("cls")
 
 
@@ -162,34 +164,6 @@ with open("octant_input.csv", "r", newline="") as file:
             octantM4 = octantM4+1
             oct = -4
         # print(cnt)
-        tempstr = f"{cnttemp*mod}-{(cnttemp+1)*mod}"
-        cnttemp += 1
-        one = (str)(temp[1])
-        two = (str)(temp[2])
-        three = (str)(temp[3])
-        four = (str)(temp[4])
-        five = (str)(temp[5])
-        six = (str)(temp[6])
-        seven = (str)(temp[7])
-        zero = (str)(temp[0])
-        if(cnttemp*mod > 30000):
-            tempstr = ""
-            one = ""
-            two = ""
-            three = ""
-            four = ""
-            five = ""
-            six = ""
-            seven = ""
-            zero = ""
-        fieldnames = ['Time', 'U', 'V', 'W', 'U Avg', 'V Avg', 'W Avg', "U'=U - U avg", "V'=V - V avg",
-                      "W'=W - W avg", 'Octant', "   ", 'Octant ID', '1', '-1', '2', '-2', '3', '-3', '4', '-4']
-        writer = csv.DictWriter(f, fieldnames=fieldnames)
-        writer.writerow({'Time': row['Time'], 'U': x, 'V': y, 'W': z,  "U Avg": Uavg1, "V Avg": Vavg1, "W Avg": Wavg1, "U'=U - U avg": x-Uavg, "V'=V - V avg": y-Vavg,
-                        "W'=W - W avg": z-Wavg, "Octant": oct, "   ": " ", "Octant ID": tempstr, "1": zero, "-1": one, "2": two, "-2": three, "3": four, "-3": five, "4": six, "-4": seven})
-        Uavg1 = ""
-        Vavg1 = ""
-        Wavg1 = ""
         octantk.append(oct)
         cnt2 = cnt2+1
         if (cnt2 == mod):
@@ -222,6 +196,36 @@ with open("octant_input.csv", "r", newline="") as file:
             elif x > 0 and y < 0 and z < 0:
                 temp[7] = temp[7] + 1
             # octantM4 = octantM4+1
+        tempstr = f"{cnttemp*mod}-{(cnttemp+1)*mod}"
+        one = (str)(octantk[cnttemp*mod:(cnttemp+1)*mod-1].count(-1))
+        two = (str)(octantk[cnttemp*mod:(cnttemp+1)*mod-1].count(2))
+        three = (str)(octantk[cnttemp*mod:(cnttemp+1)*mod-1].count(-2))
+        four = (str)(octantk[cnttemp*mod:(cnttemp+1)*mod-1].count(3))
+        five = (str)(octantk[cnttemp*mod:(cnttemp+1)*mod-1].count(-3))
+        six = (str)(octantk[cnttemp*mod:(cnttemp+1)*mod-1].count(4))
+        seven = (str)(octantk[cnttemp*mod:(cnttemp+1)*mod-1].count(-4))
+        zero = (str)(octantk[cnttemp*mod:(cnttemp+1)*mod-1].count(1))
+        cnttemp += 1
+        if(cnttemp*mod > 30000):
+                tempstr = ""
+                one = ""
+                two = ""
+                three = ""
+                four = ""
+                five = ""
+                six = ""
+                seven = ""
+                zero = ""
+        fieldnames = ['Time', 'U', 'V', 'W', 'U Avg', 'V Avg', 'W Avg', "U'=U - U avg", "V'=V - V avg",
+                        "W'=W - W avg", 'Octant', "   ", 'Octant ID', '1', '-1', '2', '-2', '3', '-3', '4', '-4']
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writerow({'Time': row['Time'], 'U': x, 'V': y, 'W': z,  "U Avg": Uavg1, "V Avg": Vavg1, "W Avg": Wavg1, "U'=U - U avg": x-Uavg, "V'=V - V avg": y-Vavg,
+                            "W'=W - W avg": z-Wavg, "Octant": oct, "   ": " ", "Octant ID": tempstr, "1": zero, "-1": one, "2": two, "-2": three, "3": four, "-3": five, "4": six, "-4": seven})
+        Uavg1 = ""
+        Vavg1 = ""
+        Wavg1 = ""
+
+# print(list[0][0])
 if(temp != [0, 0, 0, 0, 0, 0, 0, 0]):
     list.append(temp)
 print(list)
