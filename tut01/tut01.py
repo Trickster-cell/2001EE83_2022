@@ -146,6 +146,8 @@ def fun(mod=5000):
             # implementing onwards 2nd row
             elif(cnttemp >= 2):
                 ty = min(cnt, (cnttemp-1)*mod)
+                if(ty!=cnt):
+                    ty-=1
                 tempstr = f"{(cnttemp-2)*mod}-{ty}"
                 one = (str)(octantk[(cnttemp-2)*(mod)                                    :min((cnttemp+1-2)*(mod)-1, cnt)].count(-1))
                 # counting values corresponding to given range
