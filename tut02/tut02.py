@@ -1,5 +1,6 @@
-import os
 # from tokenize import Number
+from asyncio.windows_events import NULL
+from itertools import count
 from openpyxl import Workbook
 from openpyxl import load_workbook
 
@@ -25,7 +26,8 @@ def decide_octant(u, v, w):
         return "-4"
 
 
-wb = load_workbook(r"input_octant_transition_identify.xlsx")
+wb = load_workbook(
+    r'D:\Desktop Backup\2001EE83_2022\tut02\input_octant_transition_identify.xlsx')
 
 sheet = wb.active
 
@@ -96,8 +98,7 @@ if row_count % Mod == 0:
 print(modcnt)
 
 
-dict2 = {"+1": 0, "-1": 1, "+2": 2, "-2": 3,
-         "+3": 4, "-3": 5, "+4": 6, "-4": 7}
+dict2 = {"+1": 0, "-1": 1, "+2": 2, "-2": 3,"+3": 4, "-3": 5, "+4": 6, "-4": 7}
 
 
 arr2 = [0]*8
@@ -143,32 +144,73 @@ lastval += 3
 sheet.cell(row=lastval, column=13).value = "Overall Transition Count"
 sheet.cell(row=lastval+1, column=14).value = "To"
 sheet.cell(row=lastval+3, column=12).value = "From"
-sheet.cell(row=lastval+1, column=13).value = "Count"
+sheet.cell(row=lastval+2, column=13).value = "Count"
 
 for i in range(8):
-    sheet.cell(row=lastval+1, column=14+i).value = keys[i]
+    sheet.cell(row=lastval+2, column=14+i).value = keys[i]
 for i in range(8):
-    sheet.cell(row=lastval+2+i, column=13).value = keys[i]
+    sheet.cell(row=lastval+3+i, column=13).value = keys[i]
 
 lv = 0
 hv = Mod
 
+constr = lastval+3
+
+strtvals = []
+
+t = 0
+
 for i in range(modcnt):
-    lastval+=11
+    lastval+=14
     sheet.cell(row=lastval+1, column=13).value = str(lv)+" - "+str(hv)
     sheet.cell(row=lastval, column=13).value = "Mod Transition Count"
     sheet.cell(row=lastval+1, column=14).value = "To"
+    sheet.cell(row=lastval+2, column=13).value = "Count"
     sheet.cell(row=lastval+3, column=12).value = "From"
+    strtvals.append(lastval+3)
+    t+=1
+    # strtvals.append(14)
     lv = hv+1
     hv += Mod
     hv = min(hv, row_count)
 
     for i in range(8):
-        sheet.cell(row=lastval+1, column=14+i).value = keys[i]
+        sheet.cell(row=lastval+2, column=14+i).value = keys[i]
     for i in range(8):
-        sheet.cell(row=lastval+2+i, column=13).value = keys[i]
+        sheet.cell(row=lastval+3+i, column=13).value = keys[i]
 
 print(finarr)
+
+k = 0
+cnt = 0
+one = 1
+prev = sheet.cell(row=2, column=11).value
+print(strtvals)
+print(prev)
+for i in range (3, row_count+1):
+    curr = sheet.cell(row = i, column= 11).value
+    # print(curr)
+    tempprev = dict2[prev]
+    tempcurr = dict2[curr]
+    temp1 = sheet.cell(row=constr+tempprev, column=14+tempcurr).value
+    # print(strtvals[k]+tempprev, 14+tempcurr, tempprev, tempcurr, cnt, temp)
+    if(temp1!=None):
+        sheet.cell(row=constr+tempprev, column=14+tempcurr).value=int(temp1)+1
+    else:
+        sheet.cell(row=constr+tempprev, column=14+tempcurr).value=1
+        
+    temp = sheet.cell(row=strtvals[k]+tempprev, column=14+tempcurr).value
+    # print(strtvals[k]+tempprev, 14+tempcurr, tempprev, tempcurr, cnt, temp)
+    if(temp!=None):
+        sheet.cell(row=strtvals[k]+tempprev, column=14+tempcurr).value=int(temp)+1
+    else:
+        sheet.cell(row=strtvals[k]+tempprev, column=14+tempcurr).value=1
+    
+    cnt+=1
+    prev = str(curr)
+    if cnt % Mod == 0:
+        k += 1
+        # cnt = 1
 
 # print(dict)
 
