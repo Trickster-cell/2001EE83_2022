@@ -119,7 +119,7 @@ for i in range(2, row_count+1):
         cnt = 0
 
 lv = 0
-hv = Mod
+hv = Mod-1
 
 for i in range(4, 4+modcnt):
     sheet.cell(row=i, column=13).value = str(lv) + " - " + str(hv)
@@ -152,13 +152,12 @@ for i in range(8):
     sheet.cell(row=lastval+3+i, column=13).value = keys[i]
 
 lv = 0
-hv = Mod
+hv = Mod-1
 
 constr = lastval+3
 
 strtvals = []
 
-t = 0
 
 for i in range(modcnt):
     lastval+=14
@@ -168,7 +167,6 @@ for i in range(modcnt):
     sheet.cell(row=lastval+2, column=13).value = "Count"
     sheet.cell(row=lastval+3, column=12).value = "From"
     strtvals.append(lastval+3)
-    t+=1
     # strtvals.append(14)
     lv = hv+1
     hv += Mod
