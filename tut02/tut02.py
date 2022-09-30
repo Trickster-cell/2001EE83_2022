@@ -110,7 +110,7 @@ def mainfun(Mod=5000):
 # made an empty 2d array to store the values for table
 
     ind = 0
-    cnt = 1
+    cnt = 0
     for i in range(2, row_count+1):
         oct = sheet.cell(row=i, column=11).value
         j = dict2[oct]
