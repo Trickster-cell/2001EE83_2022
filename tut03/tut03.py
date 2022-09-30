@@ -23,7 +23,7 @@ def decide_octant(u, v, w):
         return "-4"
 
 
-# Main function which we will call at the bottom. The Mod value can be changed here in function parameter, or when the function is called.
+# Main function which we will call at the bottom.
 def fun():
     wb = load_workbook(r'input_octant_longest_subsequence.xlsx')
 
@@ -131,5 +131,6 @@ def fun():
 
     wb.save("output_octant_longest_subsequence.xlsx")
 # saved the sheet in output file
+fun()
 print("Program finally executed.")
 # printing the code success message
