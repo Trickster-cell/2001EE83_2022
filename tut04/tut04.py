@@ -107,9 +107,13 @@ for i in range (8):
     sheet.cell(row=2+i, column=14).value = dict[keys[i]]
 
 dict2 = {"+1": 0, "-1": 0, "+2": 0, "-2": 0,"+3": 0, "-3": 0, "+4": 0, "-4": 0}
+#dictionary to store the frequency of maximum length of subsequence 
 
 dict3 = {"+1": [], "-1": [], "+2": [], "-2": [],"+3": [], "-3": [], "+4": [], "-4": []}
+# dictionary to store the starting point times of maximum length subsequence
 dict4 = {"+1": [], "-1": [], "+2": [], "-2": [],"+3": [], "-3": [], "+4": [], "-4": []}
+# dictionary to store the ending point times of maximum length subsequence
+
 
 prev = "+1"
 prcnt = 0
@@ -122,8 +126,10 @@ for i in range(2, row_count+1):
         # print(k)
         if prcnt == dict[prev]:
             dict2[prev]+=1
+            # increasing the count of maximum length subsequence
             dict3[prev].append(stp)
             dict4[prev].append(etp)
+            # storing the starting and ending point of the subsequences
         prcnt = 1
         prev = k
         stp = sheet.cell(row = i, column=1).value
@@ -132,8 +138,10 @@ for i in range(2, row_count+1):
     etp=sheet.cell(row=i,column=1).value
 # print(dict2)
 
-print(dict3)
-print(dict4)
+# print(dict3)
+# print(dict4)
+
+# printing the subsequence time range values.
 k = 2
 
 for i in range(8):
@@ -161,7 +169,7 @@ for idx, col in enumerate(sheet.columns, 1):
 
 wb.save("output_octant_longest_subsequence.xlsx")
 # saved the sheet in output file
-# print("Program finally executed with value of Mod =", Mod)
+print("Program finally executed.")
 # printing the code success message
 
 
