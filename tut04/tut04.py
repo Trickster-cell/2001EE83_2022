@@ -106,12 +106,12 @@ dict[prev] = max(dict[prev], prcnt)
 for i in range (8):
     sheet.cell(row=2+i, column=14).value = dict[keys[i]]
 
-dict2 = {"+1": 0, "-1": 0, "+2": 0, "-2": 0,"+3": 0, "-3": 0, "+4": 0, "-4": 0}
+frq_of_maxm_subs = {"+1": 0, "-1": 0, "+2": 0, "-2": 0,"+3": 0, "-3": 0, "+4": 0, "-4": 0}
 #dictionary to store the frequency of maximum length of subsequence 
 
-dict3 = {"+1": [], "-1": [], "+2": [], "-2": [],"+3": [], "-3": [], "+4": [], "-4": []}
+starting_points = {"+1": [], "-1": [], "+2": [], "-2": [],"+3": [], "-3": [], "+4": [], "-4": []}
 # dictionary to store the starting point times of maximum length subsequence
-dict4 = {"+1": [], "-1": [], "+2": [], "-2": [],"+3": [], "-3": [], "+4": [], "-4": []}
+ending_points = {"+1": [], "-1": [], "+2": [], "-2": [],"+3": [], "-3": [], "+4": [], "-4": []}
 # dictionary to store the ending point times of maximum length subsequence
 
 
@@ -125,10 +125,10 @@ for i in range(2, row_count+1):
     if k is not prev:
         # print(k)
         if prcnt == dict[prev]:
-            dict2[prev]+=1
+            frq_of_maxm_subs[prev]+=1
             # increasing the count of maximum length subsequence
-            dict3[prev].append(stp)
-            dict4[prev].append(etp)
+            starting_points[prev].append(stp)
+            ending_points[prev].append(etp)
             # storing the starting and ending point of the subsequences
         prcnt = 1
         prev = k
@@ -136,10 +136,10 @@ for i in range(2, row_count+1):
     else:
         prcnt+=1
     etp=sheet.cell(row=i,column=1).value
-# print(dict2)
+# print(frq_of_maxm_subs)
 
-# print(dict3)
-# print(dict4)
+# print(starting_points)
+# print(ending_points)
 
 # printing the subsequence time range values.
 k = 2
@@ -147,25 +147,26 @@ k = 2
 for i in range(8):
     sheet.cell(row=k, column=17).value =  keys[i]
     sheet.cell(row=k, column=18).value =  dict[keys[i]]
-    sheet.cell(row=k, column=19).value =  dict2[keys[i]]
+    sheet.cell(row=k, column=19).value =  frq_of_maxm_subs[keys[i]]
     k+=1
     sheet.cell(row=k, column=17).value =  "Time"
     sheet.cell(row=k, column=18).value =  "From"
     sheet.cell(row=k, column=19).value =  "To"
     k+=1
-    for j in range (dict2[keys[i]]):
-        sheet.cell(row=k, column=18).value = dict3[keys[i]][j]
-        sheet.cell(row=k, column=19).value = dict4[keys[i]][j]
+    for j in range (frq_of_maxm_subs[keys[i]]):
+        sheet.cell(row=k, column=18).value = starting_points[keys[i]][j]
+        sheet.cell(row=k, column=19).value = ending_points[keys[i]][j]
         k+=1
     
 
 for i in range (8):
-    sheet.cell(row=2+i, column=15).value = dict2[keys[i]]
+    sheet.cell(row=2+i, column=15).value = frq_of_maxm_subs[keys[i]]
     
 
 
 for idx, col in enumerate(sheet.columns, 1):
     sheet.column_dimensions[get_column_letter(idx)].auto_size = True
+# adjusting the column width according to the contents.
 
 wb.save("output_octant_longest_subsequence.xlsx")
 # saved the sheet in output file
