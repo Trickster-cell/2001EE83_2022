@@ -1,11 +1,6 @@
-from calendar import c
-from math import ceil
-from multiprocessing.sharedctypes import Value
-from pickle import TRUE
 from openpyxl import Workbook
 from openpyxl import load_workbook
 from openpyxl.utils import get_column_letter
-from collections import OrderedDict
 import numpy as np
 
 
@@ -30,10 +25,12 @@ def decide_octant(u, v, w):
 
 
 def FunToSort(rowi, sheet, list1, keys, keynames, dict4first):
+    # function to print the sorted index on the sheet 
     list = []
     for i in range(8):
         list.append([sheet.cell(row=rowi, column=14+i).value, i+1])
     list.sort(reverse=True)
+    # appended the values on a list and then reverse sorted it
     for i in range(8):
         # print(list[i][1])
         list1.append(list[i][1])
@@ -42,6 +39,7 @@ def FunToSort(rowi, sheet, list1, keys, keynames, dict4first):
     sheet.cell(row=rowi, column=30).value = keys[list1[0]-1]
     dict4first[keys[list1[0]-1]]+=1
     sheet.cell(row=rowi, column=31).value = keynames[list1[0]-1]
+    # finally printed the values on the sheet
 
 
 def mainfun(Mod=5000):
@@ -103,7 +101,7 @@ def mainfun(Mod=5000):
                 "Internal sweep",
                 "External sweep"
                 ]
-# list to store all the keys of octants
+# lists to store all the keys of octants and their names
 
     for i in range(2, row_count+1):
         u = sheet.cell(row=i, column=8).value
@@ -174,41 +172,69 @@ def mainfun(Mod=5000):
 # and then finally set the empty cells in the octant tables for different mod ranges to 0
 
     sheet.insert_rows(1)
+    # inserted a row at top
     for i in range(len(keys)):
         sheet.cell(row=1, column=22+i).value = keys[i]
         sheet.cell(row=2, column=22+i).value = "Rank" + str(1+i)
-
+    # headings in row1
     sheet.cell(row=2, column=22+8).value = "Rank1 Octant ID"
     sheet.cell(row=2, column=22+9).value = "Rank1 Octant Name"
 
     listtemp = []
     dicttrash = {"1": 0, "-1": 1, "2": 2, "-2": 3,
              "3": 4, "-3": 5, "4": 6, "-4": 7}
+    # just a trash dictionary to make the function work
     FunToSort(3, sheet, listtemp, keys, keynames, dicttrash)
+    # called the function to write sorted values on the sheet
+    dicttrash.clear
     # print(listtemp)
     
     k = row_count//Mod
     sz = k+1;
     if(row_count%Mod==0):
         sz-=1
+    # calculated number of rows for the table
     dict5 = {"1": 0, "-1": 0, "2": 0, "-2": 0,
             "3": 0, "-3": 0, "4": 0, "-4": 0}
+    # dictionary to make the function work and will store how many times
+    # a particular octant was the most occuring octant
     for i in range(sz):
         listtemp2 = []
         FunToSort(5+i, sheet, listtemp2, keys, keynames, dict5)
         listtemp2.clear
+    # implemented function for all the rows starting from 5..
     
     # print(dict5)
+    endoftab = 4+sz
+    # calculate the row where the table ends
+    endoftab+=4
+    # giving a proper gap between tables
     
+    
+     
+    # now filling the table for frequency of rank1 octants
+    sheet.cell(row=14, column=endoftab).value = "Octant ID"
+    sheet.cell(row=15, column=endoftab).value = "Octant Name"
+    sheet.cell(row=16, column=endoftab).value = "Count of Rank 1 Mod Values"
+    endoftab+=1
+    for i in range(8):
+        sheet.cell(row = endoftab+i, column=14).value = keys[i]
+        sheet.cell(row = endoftab+i, column=15).value = keynames[i]
+        sheet.cell(row = endoftab+i, column=16).value = dict5[keys[i]]
+        
     
     
     
     for idx, col in enumerate(sheet.columns, 1):
         sheet.column_dimensions[get_column_letter(idx)].auto_size = True
-    wb.save("output_octant_transition_identify.xlsx")
-# saved the sheet in output file
+    # adjusted the columns size according to their contents
+    
+    
+    
+    wb.save("octant_output_ranking_excel.xlsx")
+    # saved the sheet in output file
     print("Program finally executed with value of Mod =", Mod)
-# printing the code success message
+    # printing the code success message
 
 
 mainfun(5000)
