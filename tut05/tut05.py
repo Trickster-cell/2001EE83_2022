@@ -1,7 +1,10 @@
+from datetime import datetime
+start_time = datetime.now()
+
 from openpyxl import Workbook
 from openpyxl import load_workbook
 from openpyxl.utils import get_column_letter
-import numpy as np
+# import numpy as np
 
 
 def decide_octant(u, v, w):
@@ -238,4 +241,6 @@ def mainfun(Mod=5000):
 
 
 mainfun(5000)
+end_time = datetime.now()
+print('Duration of Program Execution: {}'.format(end_time - start_time))
 #  calling the main function
