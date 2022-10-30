@@ -3,6 +3,8 @@ import os
 import csv
 # import pandas as pd
 os.system("cls")
+from datetime import datetime
+start_time = datetime.now()
 
 
 def fun(mod=5000):
@@ -190,3 +192,5 @@ def fun(mod=5000):
 
 # Calling the function with predefined value
 fun()
+end_time = datetime.now()
+print('Duration of Program Execution: {}'.format(end_time - start_time))

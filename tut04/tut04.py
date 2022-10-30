@@ -2,7 +2,8 @@ from ast import Str
 from openpyxl import Workbook
 from openpyxl import load_workbook
 from openpyxl.utils import get_column_letter
-
+from datetime import datetime
+start_time = datetime.now()
 
 def decide_octant(u, v, w):
     # Function to decide the octant on the basis of given values of u, v, and w
@@ -173,4 +174,6 @@ wb.save("output_octant_longest_subsequence.xlsx")
 print("Program finally executed.")
 # printing the code success message
 
+end_time = datetime.now()
+print('Duration of Program Execution: {}'.format(end_time - start_time))
 
