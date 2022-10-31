@@ -1,0 +1,2 @@
+
+#     if weekday == "Mo"
