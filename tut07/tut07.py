@@ -62,7 +62,7 @@ def decide_octant(u, v, w):
 
 PathA = os.getcwd()
 
-# os.makedirs("OutputTemp", exist_ok=True)
+# os.makedirs("output", exist_ok=True)
 
 mod = 5000
 MOD = mod
@@ -79,7 +79,7 @@ octantnames = ["Internal outward interaction",
                "Internal sweep",
                "External sweep"
                ]
-
+# octants and their names
 dict4octants = {}
 for i in octants:
     dict4octants[i] = 0
@@ -91,7 +91,7 @@ def outpathfun(xlfile, MOD):
     # print(fname)
     # print(fname)
     return fname
-
+# returning the name of output file
 
 dict4first = {}
 
@@ -121,6 +121,7 @@ def FunToSort(rowi, sheet, list1, octants, keynames, dict4first):
 
 
 def mainfun(file):
+    # main function which will be executed for each of the file in input
     wb = load_workbook(f"{PathA}\input\{file}")
     # print(f"{PathA}\input\{file}")
     sheet = wb.active
@@ -478,9 +479,9 @@ def mainfun(file):
     opname = outpathfun(file, MOD)
     for i in range(60):
         sheet.column_dimensions[gs(i+1)].width = 25
-    wb.save(f"{PathA}\OutputTemp\{opname}")
+    wb.save(f"{PathA}\output\{opname}")
     print(f"{opname}, file processed.")
-    # print(f"{PathA}\OutputTemp\{opname}")
+    # print(f"{PathA}\output\{opname}")
     
 
 
@@ -489,7 +490,7 @@ dir_list = os.listdir(f"{PathA}\input")
 # print(dir_list)
 
 os.chdir(PathA)
-os.makedirs("OutputTemp", exist_ok=True)
+os.makedirs("output", exist_ok=True)
 
 for i in dir_list:
     mainfun(i)
