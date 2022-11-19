@@ -4,6 +4,96 @@ import pandas as pd
 import os
 import datetime
 
+
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.base import MIMEBase
+from email import encoders
+
+
+
+def send_mail(fromaddr, frompasswd, toaddr, msg_subject, msg_body, file_path):
+    try:
+        msg = MIMEMultipart()
+        print("[+] Message Object Created")
+    except:
+        print("[-] Error in Creating Message Object")
+        return
+
+    msg['From'] = fromaddr
+
+    msg['To'] = toaddr
+
+    msg['Subject'] = msg_subject
+
+    body = msg_body
+
+    msg.attach(MIMEText(body, 'plain'))
+
+    filename = file_path
+    attachment = open(filename, "rb")
+
+    p = MIMEBase('application', 'octet-stream')
+
+    p.set_payload((attachment).read())
+
+    encoders.encode_base64(p)
+
+    p.add_header('Content-Disposition', "attachment; filename= %s" % filename)
+
+    try:
+        msg.attach(p)
+        print("[+] File Attached")
+    except:
+        print("[-] Error in Attaching file")
+        return
+
+    try:
+        # s = smtplib.SMTP('smtp.gmail.com', 587) if you are sending mail from Gmail, for Gmail use app password in password
+        # s = smtplib.SMTP('mail.iitp.ac.in', 587) if you are sending mail from zimbra mail
+        s = smtplib.SMTP('stud.iitp.ac.in', 587) #if you are sending mail from zimbra stud
+        print("[+] SMTP Session Created")
+    except:
+        print("[-] Error in creating SMTP session")
+        return
+
+    s.starttls()
+
+    try:
+        s.login(fromaddr, frompasswd)
+        print("[+] Login Successful")
+    except:
+        print("[-] Login Failed")
+
+    text = msg.as_string()
+
+    try:
+        s.sendmail(fromaddr, toaddr, text)
+        print("[+] Mail Sent successfully")
+    except:
+        print('[-] Mail not sent')
+
+    s.quit()
+
+
+def isEmail(x):
+    if ('@' in x) and ('.' in x):
+        return True
+    else:
+        return False
+
+
+# f = open('qr_3_col_input.csv', 'r')
+
+
+FROM_ADDR = "yash_2001ee83@iitp.ac.in" #change mail
+FROM_PASSWD = "CHANGE IT" #Password
+TO_ADDR = "cs3842022@gmail.com"
+
+Subject = "Consolidated Attendance Report"
+
+
 head4indi = ["Date", "Roll", "Name", "Total Attendance Count",
              "Real", "Duplicate", "Invalid", "Absent"]
 
@@ -52,8 +142,10 @@ def timesplit(timeofatt):
 def per(a, b):
     c = a/b
     c *= 100
-    return c
+    return round(c,2)
 
+
+start_time = datetime.datetime.now()
 
 registered = pd.read_csv('input_registered_students.csv')
 
@@ -63,7 +155,7 @@ dictoffakes = {}
 regroll = []
 dictofRoll = {}
 
-os.makedirs('OutputTemp', exist_ok=True)
+os.makedirs('output', exist_ok=True)
 
 cons = openpyxl.Workbook()
 consolidated = cons.active
@@ -80,7 +172,7 @@ for i in range(len(registered)):
     dictofatt[tempr] = []
     rolltemp = openpyxl.Workbook()
     rolltempfile = rolltemp.active
-    path = "OutputTemp/" + (str)(tempr) + ".xlsx"
+    path = "output/" + (str)(tempr) + ".xlsx"
     rolltemp.save(path)
 
 
@@ -130,7 +222,7 @@ for i in range(len(attendance)):
     firstrowset(rolltempfile, sortedValidDates)
     rolltempfile.cell(row=2, column=2).value = rollt
     rolltempfile.cell(row=2, column=3).value = namet
-    path = "OutputTemp/" + (str)(rollt) + ".xlsx"
+    path = "output/" + (str)(rollt) + ".xlsx"
 
     timeofatt = attendance.iloc[i, 0]
     timetemp = timesplit(timeofatt)
@@ -180,7 +272,7 @@ for i in regroll:
         else:
             invalidmarked += 1
 
-    path = "OutputTemp/" + (str)(i) + ".xlsx"
+    path = "output/" + (str)(i) + ".xlsx"
     # filename = (str)(i) + ".xlsx"
     tempwb = load_workbook(path)
     tempsheet = tempwb.active
@@ -222,4 +314,30 @@ for i in range(len(dictofRoll)):
 for i in range(len(sortedValidDates)):
     consolidated.cell(row=1, column=3+i).value = sortedValidDates[i]
 
-cons.save("OutputTemp/input_attendance_consolidated.xlsx")
+cons.save("output/input_attendance_consolidated.xlsx")
+
+end_time1 = datetime.datetime.now()
+
+print("Reports Created in: {}".format(end_time1-start_time))
+
+res = input("[+] Do you want to send Consolidated Attendance Report to cs3842022@gmail.com? (Y/N)\n")
+filepath = "output/input_attendance_consolidated.xlsx"
+
+msg_body = '''Respected Sir, 
+
+Please find the consolidated attendance report attached in the mail.
+
+Thanks and Regards
+Yash Raj
+Roll-2001EE83
+Electrical & Electronics Engg.
+Ph No. +91-7903510948'''
+
+if(res=='Y'):
+    send_mail(FROM_ADDR, FROM_PASSWD, TO_ADDR, "Consolidated Attendance Report", msg_body, filepath)
+    end_time2 = datetime.datetime.now()
+    print("Mail Sent in: {}".format(end_time2-end_time1))
+
+end_time3 = datetime.datetime.now()
+print("Program executed in: {}".format(end_time3-start_time))
+    
